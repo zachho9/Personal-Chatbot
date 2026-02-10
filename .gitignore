@@ -9,3 +9,8 @@ wheels/
 
 # Virtual environments
 .venv/
+
+# conversation logs
+*.db
+*.db-shm
+*.db-wal
