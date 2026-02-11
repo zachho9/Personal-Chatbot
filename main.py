@@ -69,6 +69,7 @@ graph.add_node("process", process)
 graph.add_edge(START, "process")
 graph.add_edge("process", END) 
 
+os.makedirs("./database", exist_ok=True)
 db_connection = sqlite3.connect("./database/chatbot_memory.db", check_same_thread=False)
 checkpointer = SqliteSaver(db_connection)
 agent = graph.compile(checkpointer=checkpointer)
@@ -114,7 +115,7 @@ while True:
     state = agent.get_state(config)
     if state.values.get("messages") and thread_id not in summaries:
         summary_response = llm.invoke(
-            state.values["messages"] + [HumanMessage(content="Summarize this entire conversation in no more than 10 words using the same major language as the conversation.")]
+            state.values["messages"] + [HumanMessage(content="Summarize this entire conversation in no more than 10 words using the same major language as the conversation. Respond with plain text only.")],
         )
         save_summary(thread_id, summary_response.content)
 
