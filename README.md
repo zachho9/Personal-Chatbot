@@ -4,7 +4,7 @@ This project is about creating a personal AI chatbot for my daily use. It allows
 
 ## Features
 
-- Multi-provider support: OpenAI (gpt-4o-mini), Google (gemini-2.5-flash), Anthropic (claude-haiku-4-5)
+- Multi-provider support: OpenAI, Google, and Anthropic
 - In-conversational memory: conversation history is saved to a local SQLite database using LangGraph's checkpointer, so conversations persist across program restarts
 - Cross-conversational memory (planned): long-term memory using LangGraph's Store interface to remember user preferences and facts across different conversations
 - Thread management: start new conversations or continue existing ones by thread ID
