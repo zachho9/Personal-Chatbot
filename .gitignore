@@ -11,6 +11,8 @@ wheels/
 .venv/
 
 # conversation logs
+database/
 *.db
 *.db-shm
 *.db-wal
+*.json
