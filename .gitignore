@@ -16,3 +16,6 @@ database/
 *.db-shm
 *.db-wal
 *.json
+
+# code for testing
+main2.py

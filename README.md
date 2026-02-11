@@ -4,10 +4,10 @@ This project is about creating a personal AI chatbot for my daily use. It allows
 
 ## Features
 
-- Multi-provider support: OpenAI, Google, and Anthropic
-- In-conversational memory: conversation history is saved to a local SQLite database using LangGraph's checkpointer, so conversations persist across program restarts
-- Cross-conversational memory (planned): long-term memory using LangGraph's Store interface to remember user preferences and facts across different conversations
-- Thread management: start new conversations or continue existing ones by thread ID
+- **Multi-provider support**: OpenAI, Google, Anthropic
+- **In-conversational memory**: conversation history is saved to a local SQLite database using LangGraph's checkpointer, so conversations persist across program restarts
+- **Cross-conversational memory**: long-term memory using LangGraph's InMemoryStore to remember user preferences and facts across different conversations, persisted to a JSON file on disk
+- **Thread management**: start new conversations or continue existing ones from a numbered list with auto-generated summaries
 
 ## Tech Stack
 
@@ -37,4 +37,4 @@ This project is about creating a personal AI chatbot for my daily use. It allows
 uv run main.py
 ```
 
-You will be prompted to choose an LLM provider, then choose whether to start a new conversation or continue an existing one. Type `exit` to quit.
+You will be prompted to choose an LLM provider, then choose whether to start a new conversation or continue an existing one. Type `exit` to return to the main menu, or choose quit to exit the program.
