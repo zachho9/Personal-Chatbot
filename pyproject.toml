@@ -15,4 +15,5 @@ dependencies = [
     "langgraph-checkpoint-sqlite>=3.0.3",
     "notebook>=7.5.0",
     "python-dotenv>=1.2.1",
+    "sqlalchemy>=2.0.46",
 ]

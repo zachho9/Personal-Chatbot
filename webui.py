@@ -16,8 +16,30 @@ from langgraph.store.base import BaseStore
 from langchain_core.runnables import RunnableConfig
 
 import chainlit as cl
+import chainlit.data as cl_data
+from chainlit.data.sql_alchemy import SQLAlchemyDataLayer
+
+
+import sqlite3 as _sqlite3
+import json as _json
+
+# Register adapters so SQLite can handle Python lists (used by Chainlit for tags)
+_sqlite3.register_adapter(list, lambda l: _json.dumps(l))
+_sqlite3.register_converter("TEXT", lambda b: b.decode("utf-8"))
+
 
 load_dotenv()
+
+
+@cl.password_auth_callback
+def auth_callback(username: str, password: str):
+    # Simple local auth - customize as you like
+    if (username, password) == ("user", "user"):
+        return cl.User(
+            identifier="user",
+            metadata={"role": "user"}
+        )
+    return None
 
 
 # ======================================================
@@ -130,6 +152,11 @@ memory_store = InMemoryStore()
 restore_memories_to_store(memory_store, user_id)
 
 
+@cl.data_layer
+def get_data_layer():
+    return SQLAlchemyDataLayer(conninfo="sqlite+aiosqlite:///database/webui_history.db")
+
+
 # ======================================================
 # Chainlit: Chat Profiles (LLM provider selection)
 # ======================================================
@@ -156,6 +183,9 @@ async def on_chat_start():
     cl.user_session.set("llm", llm)
     cl.user_session.set("thread_id", str(uuid.uuid4()))
 
+    # Save the profile to thread metadata for resume
+    cl.context.session.thread_metadata = {"chat_profile": profile}
+    
     await cl.Message(content=f"Chat started with **{profile}**. How can I help you?").send()
 
 
@@ -190,3 +220,16 @@ async def on_message(message: cl.Message):
 
     # Save memories to disk after each message
     save_memories_to_disk(memory_store, user_id)
+
+# chat resume handler
+@cl.on_chat_resume
+async def on_chat_resume(thread):
+    profile = thread.get("metadata", {}).get("chat_profile", "OpenAI")
+    llm = get_llm(profile)
+    agent = build_agent(llm, checkpointer, memory_store)
+
+    thread_id = thread.get("id", str(uuid.uuid4()))
+
+    cl.user_session.set("agent", agent)
+    cl.user_session.set("llm", llm)
+    cl.user_session.set("thread_id", thread_id)
