@@ -1,5 +1,7 @@
 # A Personal Chatbot
 
+<img width="1300" height="775" alt="chatbot" src="https://github.com/user-attachments/assets/b0bd3670-85ac-4d27-834b-b30a66f0b6d2" />
+
 This project is about creating a personal AI chatbot for my daily use. It allows me to switch between major LLM providers using APIs. It comes with both a CLI and a web UI (powered by Chainlit).
 
 ## Features
